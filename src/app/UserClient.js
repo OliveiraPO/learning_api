@@ -4,7 +4,7 @@ export default class UserClient {
             {
                 name:'Vinícius Oliveira',
                 rgm: '1239123',
-                job: 'Professor Universitário'
+                job: 'Estudante Universitário'
             },
             {
                 name:'Orlindo',
