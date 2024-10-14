@@ -1,14 +1,28 @@
-import UserClient from "./UserClient"
-export default class Models {
-    getData(rgm)
-    {
-        // Aquisitando os dados
-        const userClient = new UserClient()
-        let data = userClient.get()
-                        
-        // Aplicando uma regra de negócio nos dados
-        data = data.find(e => e.rgm === rgm)
+// Model.js
+import Tasks from "./Tasks";
 
-        return data
+export default class Model {
+    constructor() {
+        this.tasks = new Tasks();
+    }
+
+    getAll() {
+        return this.tasks.get();
+    }
+
+    getId(id) {
+        return this.tasks.get().find(e => e.id === id);
+    }
+
+    addTask(task) {
+        this.tasks.add(task);
+    }
+
+    updateTask(id, updatedTask) {
+        this.tasks.update(id, updatedTask);
+    }
+
+    deleteTask(id) {
+        this.tasks.delete(id);
     }
 }

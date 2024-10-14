@@ -1,29 +1,47 @@
-'use client'
-
-import Models from "./Models"
-import View from "./View"
-import Presenter from "./Presenter"
-import { useSearchParams } from "next/navigation";
+"use client"
+import Model from "./Model.js";
+import View from "./View.js";
+import Presenter from "./Presenter.js";
+import { useEffect, useState } from "react";
 
 export default function Home() {
-  //Instanciando a classe Presenter
-  const presenter = new Presenter(
-    new Models(),
-    useSearchParams()
-  )
+    const [data, setData] = useState([]);
+    const presenter = new Presenter(new Model());
 
-//Executando o codigo principal do Presenter
-presenter.execute()
+    useEffect(() => {
+        setData(presenter.getAllTasks());
+    }, []);
 
-//Retornando os dados para a View
-const data = presenter.get()
-    
-//Aplicando as regras de renderização da view
-  return (
-    <View 
-      name={data.name}
-      rgm={data.rgm}
-      job={data.job}
-    />
-  );
+    const handleAddTask = (newTask) => {
+        presenter.addTask(newTask);
+        setData(presenter.getAllTasks()); 
+    };
+
+    const handleDeleteTask = (id) => {
+        presenter.deleteTask(id); 
+        setData(prevData => prevData.filter(task => task.id !== id)); 
+    };
+
+    const handleUpdateTask = (id, updatedTask) => {
+        presenter.updateTask(id, updatedTask); 
+        setData(presenter.getAllTasks()); 
+    };
+
+    return (
+        <main>
+            <h3>Lista de Tarefas</h3>
+            {data.map(task => (
+                <View
+                    key={task.id}
+                    id={task.id}
+                    title={task.title}
+                    time={task.time}
+                    status={task.status}
+                    onDelete={handleDeleteTask}
+                    onAdd={handleAddTask} 
+                    onUpdate={handleUpdateTask} 
+                />
+            ))}
+        </main>
+    );
 }
